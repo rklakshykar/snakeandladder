@@ -1,10 +1,12 @@
 package org.sahaj.core;
 
+import java.util.Random;
+
 public class Dice {
     int rolledValue;
 
     public void rollDice(){
-        this.rolledValue = (int) (Math.random()*6) + 1;
+        this.rolledValue = new Random().nextInt(6)+1;
     }
 
     public int getRolledValue(){
