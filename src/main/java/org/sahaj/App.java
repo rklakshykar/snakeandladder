@@ -9,25 +9,28 @@ import org.sahaj.player.Player;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class App {
-    public static void main(String[] args) throws  IOException, ParseException {
+    private static final Logger logger = LogManager.getLogger(App.class);
+
+    public static void main(String[] args) throws IOException, ParseException {
         InputStream is = App.class.getClassLoader().getResourceAsStream("input.json");
         JSONParser jsonParser = new JSONParser();
         JSONObject jsonObject = (JSONObject) jsonParser.parse(
-                new InputStreamReader(is, "UTF-8"));
+                new InputStreamReader(is, StandardCharsets.UTF_8));
         int totalSimulation = Integer.parseInt(jsonObject.get("simulations").toString());
         int[][] ladders = extractArrayData(jsonObject, "ladders", "top", "bottom");
         int[][] snakes = extractArrayData(jsonObject, "snakes", "head", "tail");
         List<Player> simulations = new ArrayList<>();
 
         while (totalSimulation > 0) {
-            System.out.println("Simulation.." + totalSimulation);
+            logger.trace("Simulation..{}", totalSimulation);
             SnakeNLadder snakeNLadder = new SnakeNLadder(snakes, ladders);
             while (!snakeNLadder.isGameOver()) {
                 snakeNLadder.play(0);
@@ -35,14 +38,10 @@ public class App {
             simulations.add(snakeNLadder.player);
             totalSimulation--;
         }
-        simulations.forEach(player -> System.out.println(player.toString()));
+        simulations.forEach(player -> logger.info(player.toString()));
+
     }
 
-    private static void printData(int[][] ladders, int[][] snakes) {
-        Arrays.stream(ladders).forEach(val -> System.out.print("[" + val[0] + "," + val[1] + "] "));
-        System.out.println();
-        Arrays.stream(snakes).forEach(val -> System.out.print("[" + val[0] + "," + val[1] + "] "));
-    }
 
     private static int[][] extractArrayData(JSONObject jsonObject, String parameter, String data1, String data2) {
         int[][] res;

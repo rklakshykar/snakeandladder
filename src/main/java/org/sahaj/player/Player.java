@@ -3,7 +3,11 @@ package org.sahaj.player;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class Player {
+    private static final Logger logger = LogManager.getLogger(Player.class);
 
     int currentPosition;
     final String name;
@@ -32,8 +36,8 @@ public class Player {
 
     public void move(int rolledDiceValue) {
         this.numberOfRolls++;
-        if(this.currentPosition==94 && rolledDiceValue==6){
-            System.out.println("Found 6 at 94....");
+        if (this.currentPosition == 94 && rolledDiceValue == 6) {
+            logger.trace("Found 6 at 94....");
             this.luckyRolls++;
         }
         if ((currentPosition + rolledDiceValue) < 101) {
@@ -65,24 +69,26 @@ public class Player {
         return climbs;
     }
 
-    public void climb(int climb) {
-        this.climbs ++;
+    public void climb(int climbTo) {
+        this.climbs++;
         this.luckyRolls++;
-        if(this.biggestClimb<climb){
-            this.biggestClimb = climb;
+        if (this.biggestClimb < (climbTo - this.currentPosition)) {
+            this.biggestClimb = (climbTo - this.currentPosition);
         }
+        this.currentPosition = climbTo;
     }
 
     public int getSlides() {
         return slides;
     }
 
-    public void slide(int slide) {
-        this.slides ++;
+    public void slide(int slideTo) {
+        this.slides++;
         this.unluckyRolls++;
-        if(this.biggestSlide< slide){
-            this.biggestSlide = slide;
+        if (this.biggestSlide < (this.currentPosition - slideTo)) {
+            this.biggestSlide = this.currentPosition - slideTo;
         }
+        this.currentPosition = slideTo;
     }
 
     public int getBiggestClimb() {

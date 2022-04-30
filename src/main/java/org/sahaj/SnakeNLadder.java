@@ -1,13 +1,18 @@
 package org.sahaj;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.sahaj.core.Board;
 import org.sahaj.core.Dice;
+import org.sahaj.helper.Constants;
 import org.sahaj.player.Player;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SnakeNLadder {
+    private static final Logger logger = LogManager.getLogger(SnakeNLadder.class);
+
     Board board;
     Player player;
     Dice dice;
@@ -19,7 +24,7 @@ public class SnakeNLadder {
 
     public SnakeNLadder(int[][] snakes, int[][] ladders) {
         this.board = new Board().withSnakes(snakes).withLadders(ladders);
-        this.player = new Player("Rohit");
+        this.player = new Player(Constants.PLAYER1.value);
         this.dice = new Dice();
     }
 
@@ -28,10 +33,10 @@ public class SnakeNLadder {
             continuousRolls = new ArrayList<>();
         }
         dice.rollDice();
-        System.out.println("Rolled Value: " + dice.getRolledValue());
+        logger.debug(Constants.ROLLED.value, dice.getRolledValue());
         continuousRolls.add(dice.getRolledValue());
         player.move(dice.getRolledValue());
-        System.out.println("Current Position: " + player.getCurrentPosition());
+        logger.debug(Constants.CURPOS.value, player.getCurrentPosition());
         checkSnake();
         checkLadder();
         checkSnakeMiss();
@@ -50,8 +55,8 @@ public class SnakeNLadder {
 
     private void checkSnakeMiss() {
         if (board.getSnakes().containsKey(player.getCurrentPosition() - 1) || board.getSnakes().containsKey(player.getCurrentPosition() - 2)
-                || board.getSnakes().containsKey(player.getCurrentPosition() + 1) || board.getSnakes().containsKey(player.getCurrentPosition() + 1)) {
-            System.out.println("Missed: Possible Snake bite missed by 1 or 2 steps");
+                || board.getSnakes().containsKey(player.getCurrentPosition() + 1) || board.getSnakes().containsKey(player.getCurrentPosition() + 2)) {
+            logger.debug("Missed: Possible Snake bite missed by 1 or 2 steps");
             player.setLuckyRolls(player.getLuckyRolls() + 1);
         }
     }
@@ -59,27 +64,23 @@ public class SnakeNLadder {
     private void checkLadder() {
 
         if (board.getLadders().containsKey(player.getCurrentPosition())) {
-            System.out.println("Ladder found at Position:" + player.getCurrentPosition());
-            player.climb(board.getLadders().get(player.getCurrentPosition()) - player.getCurrentPosition());
-            player.setCurrentPosition(board.getLadders().get(player.getCurrentPosition()));
-            System.out.println("Current Position: " + player.getCurrentPosition());
-
+            logger.debug(Constants.LADDERFOUND.value, player.getCurrentPosition());
+            player.climb(board.getLadders().get(player.getCurrentPosition()));
+            logger.debug(Constants.CURPOS.value, player.getCurrentPosition());
         }
     }
 
     private void checkSnake() {
         if (board.getSnakes().containsKey(player.getCurrentPosition())) {
-            System.out.println("Snake Bite at Position:" + player.getCurrentPosition());
-            player.slide(player.getCurrentPosition() - board.getSnakes().get(player.getCurrentPosition()));
-            player.setCurrentPosition(board.getSnakes().get(player.getCurrentPosition()));
-            System.out.println("Current Position: " + player.getCurrentPosition());
+            logger.debug(Constants.SNAKEBITE.value, player.getCurrentPosition());
+            player.slide(board.getSnakes().get(player.getCurrentPosition()));
+            logger.debug(Constants.CURPOS.value, player.getCurrentPosition());
         }
     }
 
     public boolean isGameOver() {
-        //  System.out.println(player.getName() + "'s Current Position:" + player.getCurrentPosition());
         if (player.getCurrentPosition() == 100) {
-            System.out.println("Game over...............");
+            logger.debug(".....Game over.....");
             return true;
         }
         return false;
