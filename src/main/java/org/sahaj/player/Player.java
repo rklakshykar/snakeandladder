@@ -1,6 +1,7 @@
 package org.sahaj.player;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Player {
 
@@ -17,7 +18,7 @@ public class Player {
 
     int biggestSlide;
 
-    ArrayList<Integer> longestTurn;
+    List<Integer> longestTurn;
 
     int luckyRolls;
 
@@ -30,6 +31,11 @@ public class Player {
     }
 
     public void move(int rolledDiceValue) {
+        this.numberOfRolls++;
+        if(this.currentPosition==94 && rolledDiceValue==6){
+            System.out.println("Found 6 at 94....");
+            this.luckyRolls++;
+        }
         if ((currentPosition + rolledDiceValue) < 101) {
             this.currentPosition += rolledDiceValue;
         }
@@ -59,16 +65,24 @@ public class Player {
         return climbs;
     }
 
-    public void setClimbs(int climbs) {
-        this.climbs = climbs;
+    public void climb(int climb) {
+        this.climbs ++;
+        this.luckyRolls++;
+        if(this.biggestClimb<climb){
+            this.biggestClimb = climb;
+        }
     }
 
     public int getSlides() {
         return slides;
     }
 
-    public void setSlides(int slides) {
-        this.slides = slides;
+    public void slide(int slide) {
+        this.slides ++;
+        this.unluckyRolls++;
+        if(this.biggestSlide< slide){
+            this.biggestSlide = slide;
+        }
     }
 
     public int getBiggestClimb() {
@@ -87,11 +101,11 @@ public class Player {
         this.biggestSlide = biggestSlide;
     }
 
-    public ArrayList<Integer> getLongestTurn() {
+    public List<Integer> getLongestTurn() {
         return longestTurn;
     }
 
-    public void setLongestTurn(ArrayList<Integer> longestTurn) {
+    public void setLongestTurn(List<Integer> longestTurn) {
         this.longestTurn = longestTurn;
     }
 
@@ -109,5 +123,21 @@ public class Player {
 
     public void setUnluckyRolls(int unluckyRolls) {
         this.unluckyRolls = unluckyRolls;
+    }
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "currentPosition=" + currentPosition +
+                ", name='" + name + '\'' +
+                ", numberOfRolls=" + numberOfRolls +
+                ", climbs=" + climbs +
+                ", slides=" + slides +
+                ", biggestClimb=" + biggestClimb +
+                ", biggestSlide=" + biggestSlide +
+                ", longestTurn=" + longestTurn +
+                ", luckyRolls=" + luckyRolls +
+                ", unluckyRolls=" + unluckyRolls +
+                '}';
     }
 }

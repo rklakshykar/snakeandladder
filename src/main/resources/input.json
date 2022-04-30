@@ -1,4 +1,5 @@
 {
+  "simulations": 10,
   "snakes": [
     {
       "head": 17,

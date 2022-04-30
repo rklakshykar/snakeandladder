@@ -8,11 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SnakeNLadder {
-    public Board board;
-    public Player player;
-    public Dice dice;
+    Board board;
+    Player player;
+    Dice dice;
 
-    List<Integer> conitnuousRolls;
+    List<Integer> continuousRolls;
 
     private SnakeNLadder() {
     }
@@ -25,24 +25,34 @@ public class SnakeNLadder {
 
     public void play(int sixCount) {
         if (sixCount == 0) {
-            conitnuousRolls = new ArrayList<>();
+            continuousRolls = new ArrayList<>();
         }
-
         dice.rollDice();
         System.out.println("Rolled Value: " + dice.getRolledValue());
-        conitnuousRolls.add(dice.getRolledValue());
-
+        continuousRolls.add(dice.getRolledValue());
         player.move(dice.getRolledValue());
         System.out.println("Current Position: " + player.getCurrentPosition());
         checkSnake();
         checkLadder();
+        checkSnakeMiss();
 
         if (dice.getRolledValue() == 6) {
             sixCount++;
-            // System.out.println("found 6: count"+sixCount);
             play(sixCount);
-        }else{
+        } else {
+            int currentMaxSum = continuousRolls.stream().mapToInt(i -> i).sum();
+            int existingSum = player.getLongestTurn().stream().mapToInt(i -> i).sum();
+            if (currentMaxSum > existingSum) {
+                player.setLongestTurn(this.continuousRolls);
+            }
+        }
+    }
 
+    private void checkSnakeMiss() {
+        if (board.getSnakes().containsKey(player.getCurrentPosition() - 1) || board.getSnakes().containsKey(player.getCurrentPosition() - 2)
+                || board.getSnakes().containsKey(player.getCurrentPosition() + 1) || board.getSnakes().containsKey(player.getCurrentPosition() + 1)) {
+            System.out.println("Missed: Possible Snake bite missed by 1 or 2 steps");
+            player.setLuckyRolls(player.getLuckyRolls() + 1);
         }
     }
 
@@ -50,14 +60,17 @@ public class SnakeNLadder {
 
         if (board.getLadders().containsKey(player.getCurrentPosition())) {
             System.out.println("Ladder found at Position:" + player.getCurrentPosition());
+            player.climb(board.getLadders().get(player.getCurrentPosition()) - player.getCurrentPosition());
             player.setCurrentPosition(board.getLadders().get(player.getCurrentPosition()));
             System.out.println("Current Position: " + player.getCurrentPosition());
+
         }
     }
 
     private void checkSnake() {
         if (board.getSnakes().containsKey(player.getCurrentPosition())) {
             System.out.println("Snake Bite at Position:" + player.getCurrentPosition());
+            player.slide(player.getCurrentPosition() - board.getSnakes().get(player.getCurrentPosition()));
             player.setCurrentPosition(board.getSnakes().get(player.getCurrentPosition()));
             System.out.println("Current Position: " + player.getCurrentPosition());
         }
