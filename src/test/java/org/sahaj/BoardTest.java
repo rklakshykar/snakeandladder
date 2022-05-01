@@ -13,18 +13,18 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class BoardTest {
+ class BoardTest {
 
     App app;
 
     @BeforeEach
-    public void init() {
+     void init() {
         app = new App();
     }
 
     @Test
     @DisplayName("BoardTestSuccess")
-    public void boardTestSuccess() throws IOException, ParseException {
+     void boardTestSuccess() throws IOException, ParseException {
         JSONObject jsonObject = app.getJsonObject("input.json");
         int[][] ladders = app.extractArrayData(jsonObject, "ladders", "top", "bottom");
         int[][] snakes = app.extractArrayData(jsonObject, "snakes", "head", "tail");
@@ -34,11 +34,11 @@ public class BoardTest {
 
     @Test
     @DisplayName("BoardTestFail")
-    public void boardTestFail() throws IOException, ParseException {
+     void boardTestFail() throws IOException, ParseException {
         JSONObject jsonObject = app.getJsonObject("input3.json");
         int[][] ladders = app.extractArrayData(jsonObject, "ladders", "top", "bottom");
         int[][] snakes = app.extractArrayData(jsonObject, "snakes", "head", "tail");
-        Throwable exception = assertThrows(IllegalArgumentException.class,()-> new Board().withLadders(ladders).withSnakes(snakes));
+        Throwable exception = assertThrows(IllegalArgumentException.class, () -> new Board().withLadders(ladders).withSnakes(snakes));
         assertEquals("Snake and Ladder value conflicting", exception.getMessage());
     }
 

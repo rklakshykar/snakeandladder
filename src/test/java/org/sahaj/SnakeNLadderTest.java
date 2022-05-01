@@ -14,26 +14,26 @@ import java.io.IOException;
 import static org.junit.Assert.assertEquals;
 
 
-public class SnakeNLadderTest {
+class SnakeNLadderTest {
 
     App app;
 
     @BeforeEach
-    public void init() {
+    void init() {
         app = new App();
     }
 
     @Test
     @DisplayName("SnakeNLadderSuccessTest")
-    public void snakeNLadderSuccessTest() throws IOException, ParseException {
+    void snakeNLadderSuccessTest() throws IOException, ParseException {
         JSONObject jsonObject = app.getJsonObject("input.json");
         int[][] ladders = app.extractArrayData(jsonObject, "ladders", "top", "bottom");
         int[][] snakes = app.extractArrayData(jsonObject, "snakes", "head", "tail");
-        SnakeNLadder snakeNLadder = new SnakeNLadder(snakes, ladders).withPlayer(new Player(Constants.PLAYER1.value));;
+        SnakeNLadder snakeNLadder = new SnakeNLadder(snakes, ladders).withPlayer(new Player(Constants.PLAYER1.value));
         while (!snakeNLadder.isGameOver()) {
             snakeNLadder.play(0);
         }
-        assertEquals(true,snakeNLadder.isGameOver());
+        assertEquals(true, snakeNLadder.isGameOver());
     }
 
 

@@ -11,10 +11,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -43,7 +41,7 @@ public class App {
             simulations.add(snakeNLadder.player);
             totalSimulation--;
         }
-        simulations.forEach(player -> logger.info("{}\n", player.toString()));
+        simulations.forEach(player -> logger.info("{}\n", player));
         GameStats gameStats = new GameStats(simulations);
         gameStats.printStats();
 
@@ -52,8 +50,7 @@ public class App {
     public JSONObject getJsonObject(String fileName) throws IOException, ParseException {
         InputStream is = App.class.getClassLoader().getResourceAsStream(fileName);
         JSONParser jsonParser = new JSONParser();
-        JSONObject jsonObject = (JSONObject) jsonParser.parse(new InputStreamReader(is, StandardCharsets.UTF_8));
-        return jsonObject;
+        return (JSONObject) jsonParser.parse(new InputStreamReader(is, StandardCharsets.UTF_8));
     }
 
     public int[][] extractArrayData(JSONObject jsonObject, String parameter, String data1, String data2) throws IllegalArgumentException {
