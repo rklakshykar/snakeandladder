@@ -24,10 +24,12 @@ public class SnakeNLadder {
 
     public SnakeNLadder(int[][] snakes, int[][] ladders) {
         this.board = new Board().withSnakes(snakes).withLadders(ladders);
-        this.player = new Player(Constants.PLAYER1.value);
         this.dice = new Dice();
     }
-
+    public SnakeNLadder withPlayer(Player player){
+        this.player = player;
+        return this;
+    }
     public void play(int sixCount) {
         if (sixCount == 0) {
             continuousRolls = new ArrayList<>();

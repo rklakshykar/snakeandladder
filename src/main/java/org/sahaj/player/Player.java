@@ -14,13 +14,9 @@ public class Player {
 
     int numberOfRolls;
 
-    int climbs;
+    List<Integer> climbs;
 
-    int slides;
-
-    int biggestClimb;
-
-    int biggestSlide;
+    List<Integer> slides;
 
     List<Integer> longestTurn;
 
@@ -32,6 +28,8 @@ public class Player {
         this.name = name;
         this.currentPosition = 0;
         this.longestTurn = new ArrayList<>();
+        this.climbs = new ArrayList<>();
+        this.slides = new ArrayList<>();
     }
 
     public void move(int rolledDiceValue) {
@@ -65,46 +63,32 @@ public class Player {
         this.numberOfRolls = numberOfRolls;
     }
 
-    public int getClimbs() {
+    public List<Integer> getClimbs() {
         return climbs;
     }
 
+    public void setClimbs(List<Integer> climbs) {
+        this.climbs = climbs;
+    }
+
+    public void setSlides(List<Integer> slides) {
+        this.slides = slides;
+    }
+
     public void climb(int climbTo) {
-        this.climbs++;
+        this.climbs.add(climbTo - this.currentPosition);
         this.luckyRolls++;
-        if (this.biggestClimb < (climbTo - this.currentPosition)) {
-            this.biggestClimb = (climbTo - this.currentPosition);
-        }
         this.currentPosition = climbTo;
     }
 
-    public int getSlides() {
+    public List<Integer> getSlides() {
         return slides;
     }
 
     public void slide(int slideTo) {
-        this.slides++;
+        this.slides.add(this.currentPosition - slideTo);
         this.unluckyRolls++;
-        if (this.biggestSlide < (this.currentPosition - slideTo)) {
-            this.biggestSlide = this.currentPosition - slideTo;
-        }
         this.currentPosition = slideTo;
-    }
-
-    public int getBiggestClimb() {
-        return biggestClimb;
-    }
-
-    public void setBiggestClimb(int biggestClimb) {
-        this.biggestClimb = biggestClimb;
-    }
-
-    public int getBiggestSlide() {
-        return biggestSlide;
-    }
-
-    public void setBiggestSlide(int biggestSlide) {
-        this.biggestSlide = biggestSlide;
     }
 
     public List<Integer> getLongestTurn() {
@@ -139,8 +123,6 @@ public class Player {
                 ", numberOfRolls=" + numberOfRolls +
                 ", climbs=" + climbs +
                 ", slides=" + slides +
-                ", biggestClimb=" + biggestClimb +
-                ", biggestSlide=" + biggestSlide +
                 ", longestTurn=" + longestTurn +
                 ", luckyRolls=" + luckyRolls +
                 ", unluckyRolls=" + unluckyRolls +

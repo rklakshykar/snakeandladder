@@ -2,7 +2,7 @@
   "simulations": 1,
   "snakes": [
     {
-      "head": 17,
+      "head": -17,
       "tail": 7
     },
     {
@@ -36,7 +36,7 @@
   ],
   "ladders": [
     {
-      "top": 14,
+      "top": "",
       "bottom": 4
     },
     {

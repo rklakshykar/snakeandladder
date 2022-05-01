@@ -19,6 +19,9 @@ public class Board {
 
     public Board withSnakes(int[][] headTail) {
         for (int i = 0; i < headTail.length; i++) {
+            if(this.ladders.containsKey(headTail[i][0])){
+                throw new IllegalArgumentException("Snake and Ladder value conflicting");
+            }
             this.snakes.put(headTail[i][0], headTail[i][1]);
         }
         return this;
@@ -26,6 +29,9 @@ public class Board {
 
     public Board withLadders(int[][] topBottom) {
         for (int i = 0; i < topBottom.length; i++) {
+            if(this.snakes.containsKey(topBottom[i][1])){
+                throw new IllegalArgumentException("Snake and Ladder value conflicting");
+            }
             this.ladders.put(topBottom[i][1],topBottom[i][0]);
         }
         return this;
